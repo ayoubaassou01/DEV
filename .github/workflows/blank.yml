@@ -28,14 +28,14 @@ jobs:
     # 3. Cloner le dépôt PROD dans un sous-répertoire
     - name: Clone repository PROD
       run: |
-        git clone https://github.com/ayoubaassou01/PROD.git
+        git clone https://<your-token>@github.com/ayoubaassou01/PROD.git
         cd PROD/
         git pull origin main  # Tirer les derniers changements depuis PROD
 
     # 4. Fusionner les changements de DEV/fabric dans PROD/main
     - name: Merge DEV fabric into PROD
       run: |
-        git remote add DEV https://github.com/ayoubaassou01/DEV.git
+        git remote add DEV https://<your-token>@github.com/ayoubaassou01/DEV.git
         git fetch DEV fabric
         git merge DEV/fabric --allow-unrelated-histories || true  # Forcer la fusion même avec des historiques non liés
 
@@ -44,4 +44,4 @@ jobs:
       run: |
         git add .
         git commit -m "Sync DEV fabric branch into PROD"
-        git push origin PROD  # Pousser les changements dans la branche main de PROD
+        git push origin main  # Pousser les changements dans la branche main de PROD

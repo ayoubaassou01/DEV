@@ -14,7 +14,7 @@ jobs:
     steps:
     # 1. Checkout the repository A
     - name: Checkout repository A
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     # 2. Configurer Git avec votre nom d'utilisateur et email
     - name: Set up Git

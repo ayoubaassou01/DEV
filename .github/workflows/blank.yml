@@ -29,5 +29,5 @@ jobs:
         cd PROD/
         git remote add DEV https://github.com/ayoubaassou01/DEV.git
         git remote update
-        git merge fabric/PROD
+        git merge fabric
         git push origin PROD 

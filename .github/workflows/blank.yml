@@ -12,9 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Checkout the repository A
-    - name: Checkout repository A
+    # 1. Checkout the repository DEV (A)
+    - name: Checkout repository DEV
       uses: actions/checkout@v4
+      with:
+        repository: ayoubaassou01/DEV
+        ref: fabric  # Checkout la branche fabric de DEV
 
     # 2. Configurer Git avec votre nom d'utilisateur et email
     - name: Set up Git
@@ -22,15 +25,23 @@ jobs:
         git config --global user.name "ayoubaassou01"
         git config --global user.email "ayoubaassou01@gmail.com"
 
-    # 3. Cloner le dépôt B dans un sous-répertoire
-    - name: Clone repository B
+    # 3. Cloner le dépôt PROD dans un sous-répertoire
+    - name: Clone repository PROD
       run: |
         git clone https://github.com/ayoubaassou01/PROD.git
         cd PROD/
-        git pull
+        git pull origin main  # Tirer les derniers changements depuis PROD
+
+    # 4. Fusionner les changements de DEV/fabric dans PROD/main
+    - name: Merge DEV fabric into PROD
+      run: |
         git remote add DEV https://github.com/ayoubaassou01/DEV.git
-        git remote update
-        git merge DEV/fabric --allow-unrelated-histories
+        git fetch DEV fabric
+        git merge DEV/fabric --allow-unrelated-histories || true  # Forcer la fusion même avec des historiques non liés
+
+    # 5. Commit et push les changements dans le dépôt PROD
+    - name: Push changes to PROD
+      run: |
         git add .
-        git commit -m "sync commit"
-        git push  PROD 
+        git commit -m "Sync DEV fabric branch into PROD"
+        git push origin main  # Pousser les changements dans la branche main de PROD

@@ -25,9 +25,9 @@ jobs:
     # 3. Cloner le dépôt B dans un sous-répertoire
     - name: Clone repository B
       run: |
-        git clone https://ayoubaassou01:${{ secrets.PAT_B_TOKEN }}:github.com/ayoubaassou01/PROD.git
+        git clone https://${{ secrets.PAT_B_TOKEN }}:github.com/ayoubaassou01/PROD.git
         cdd PROD/
-        git remote add DEV https://ayoubaassou01:${{ secrets.PAT_B_TOKEN }}@github.com/ayoubaassou01/PROD.git
+        git remote add DEV https://${{ secrets.PAT_B_TOKEN }}@github.com/ayoubaassou01/DEV.git
         git remote update
         git merge DEV/PROD
         git push origin PROD 

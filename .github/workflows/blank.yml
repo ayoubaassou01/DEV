@@ -44,4 +44,4 @@ jobs:
       run: |
         git add .
         git commit -m "Sync DEV fabric branch into PROD"
-        git push origin main  # Pousser les changements dans la branche main de PROD
+        git push origin PROD  # Pousser les changements dans la branche main de PROD

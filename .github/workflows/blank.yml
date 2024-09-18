@@ -30,4 +30,4 @@ jobs:
         git remote add DEV https://github.com/ayoubaassou01/DEV.git
         git remote update
         git merge DEV/fabric
-        git push origin PROD 
+        git push origin PROD --allow-unrelated-histories

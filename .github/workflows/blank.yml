@@ -25,17 +25,9 @@ jobs:
     # 3. Cloner le dépôt B dans un sous-répertoire
     - name: Clone repository B
       run: |
-        git clone https://{{ secrets.PAT_B_TOKEN }}@github.com/ayoubaassou01/PROD.git repoPROD
-
-    # 4. Copier les fichiers du dépôt A dans le dépôt B
-    - name: Copy files to repository B
-      run: |
-        rsync -av --delete ./ repoPROD/  # Copy all files from A to B
-
-    # 5. Pousser les changements dans B
-    - name: Commit and push changes to repository B
-      working-directory: repoPROD
-      run: |
-        git add .
-        git commit -m "Sync from repository A"
-        git push origin PROD  # Vous pouvez ajuster la branche de B si nécessaire
+        git clone https://ayoubaassou01:${{ secrets.PAT_B_TOKEN }}:github.com/ayoubaassou01/PROD.git
+        cdd PROD/
+        git remote add DEV https://ayoubaassou01:${{ secrets.PAT_B_TOKEN }}@github.com/ayoubaassou01/PROD.git
+        git remote update
+        git merge DEV/PROD
+        git push origin PROD 

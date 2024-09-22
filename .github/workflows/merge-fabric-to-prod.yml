@@ -6,37 +6,16 @@ on:
       - fabric
 
 permissions:
-  contents: write  # Grant write permissions to GITHUB_TOKEN
+  contents: write
 
 jobs:
   merge:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout PROD Branch
-        uses: actions/checkout@v3
+      - name: Merge Fabric into PROD
+        uses: peter-evans/merge-renovate-branch@v2
         with:
-          ref: PROD
-          fetch-depth: 0
-
-      - name: Set Up Git Config
-        run: |
-          git config --global user.name 'Your Name'
-          git config --global user.email 'your-email@example.com'
-
-      - name: Fetch Fabric Branch
-        run: git fetch origin fabric
-
-      - name: Merge Fabric into PROD Without YAML File
-        run: |
-          git merge origin/fabric --no-commit --no-ff
-          # Resolve the conflict by keeping the version from PROD
-          git rm --ours .github/workflows/merge-fabric-to-prod.yml || true
-          git add .github/workflows/merge-fabric-to-prod.yml || true
-          git commit -m "Merge 'fabric' into 'PROD' [skip ci]"
-
-      - name: Push Changes to PROD
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
-          git push origin PROD
+          branch-name: fabric
+          target-branch: PROD
+          commit-message: "Merge 'fabric' into 'PROD' [skip ci]"
+          delete-branch: false

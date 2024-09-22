@@ -1,21 +1,26 @@
-name: Merge Fabric into PROD
+name: Auto Merge Fabric to Prod
 
 on:
   push:
     branches:
       - fabric
 
-permissions:
-  contents: write
-
 jobs:
-  merge:
+  auto-merge:
     runs-on: ubuntu-latest
     steps:
-      - name: Merge Fabric into PROD
-        uses: peter-evans/merge-renovate-branch@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
         with:
-          branch-name: fabric
-          target-branch: PROD
-          commit-message: "Merge 'fabric' into 'PROD' [skip ci]"
-          delete-branch: false
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - name: Merge fabric into prod
+        run: |
+          git checkout prod
+          git merge --no-ff origin/fabric -m "Auto-merge fabric into prod"
+          git push origin prod

@@ -1,4 +1,4 @@
-name: Auto Merge Fabric to Prod
+name: Auto Merge Fabric to Prod.
 
 on:
   push:

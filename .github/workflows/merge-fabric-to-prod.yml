@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - fabric
-
+permissions:
+  contents: write  # Grant write permissions to GITHUB_TOKEN
+  
 jobs:
   merge:
     runs-on: ubuntu-latest

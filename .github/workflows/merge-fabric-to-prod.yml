@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - fabric
+
 permissions:
   contents: write  # Grant write permissions to GITHUB_TOKEN
-  
+
 jobs:
   merge:
     runs-on: ubuntu-latest
@@ -19,24 +20,23 @@ jobs:
 
       - name: Set Up Git Config
         run: |
-          git config --global user.name 'aassou'
-          git config --global user.email 'ayoubaassou01@gmail.com'
+          git config --global user.name 'Your Name'
+          git config --global user.email 'your-email@example.com'
 
       - name: Fetch Fabric Branch
         run: git fetch origin fabric
 
       - name: Merge Fabric into PROD Without YAML File
         run: |
-          # Merge without committing
           git merge origin/fabric --no-commit --no-ff
-          
-          # Remove the YAML file from the merge
-          git rm --cached .github/workflows/merge-fabric-to-prod.yml || true
-          
-          # Commit the merge
+          # Resolve the conflict by keeping the version from PROD
+          git rm --ours .github/workflows/merge-fabric-to-prod.yml || true
+          git add .github/workflows/merge-fabric-to-prod.yml || true
           git commit -m "Merge 'fabric' into 'PROD' [skip ci]"
 
       - name: Push Changes to PROD
-        run: git push origin PROD
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
+          git push origin PROD

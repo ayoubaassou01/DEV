@@ -1,0 +1,30 @@
+name: Validate Pipeline Name Field
+
+on:
+  push:
+    branches:
+      - dev-hugo
+
+jobs:
+  validate_pipeline_name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Validate 'name' Field in JSON Files
+        run: |
+          set -e
+          # Find all pipeline-content.json files
+          find DEV -type f -name 'pipeline-content.json' | while read file; do
+            echo "Checking $file"
+            # Extract the 'name' field using jq
+            value=$(jq -r '.name' "$file")
+            # Check if the 'name' field is 'hugo'
+            if [ "$value" != "hugo" ]; then
+              echo "❌ Error: '$file' has 'name' set to '$value'. Expected 'hugo'."
+              exit 1
+            else
+              echo "✅ '$file' is valid."
+            fi
+          done
